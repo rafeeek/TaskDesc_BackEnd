@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskDesc_BackEnd.BL.Interface;
+using TaskDesc_BackEnd.BL.Mapper;
+using TaskDesc_BackEnd.BL.Repositry;
 using TaskDesc_BackEnd.Database;
 
 namespace TaskDesc_BackEnd
@@ -38,6 +41,10 @@ namespace TaskDesc_BackEnd
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("FinalConnection"));
             });
+
+            services.AddScoped<I_Measure, I_MeasureRepo>();
+
+            services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
