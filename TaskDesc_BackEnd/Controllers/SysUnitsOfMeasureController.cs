@@ -18,7 +18,6 @@ namespace TaskDesc_BackEnd.Controllers
     {
         private readonly I_Measure measure;
         private readonly IMapper mapper;
-        private readonly Response response;
 
         #region Ctor
         public SysUnitsOfMeasureController(I_Measure Measure , IMapper Mapper)
@@ -28,8 +27,8 @@ namespace TaskDesc_BackEnd.Controllers
         }
         #endregion
 
-
         #region APIs
+        //[EnableQuery]
 
         [HttpPost]
         [Route("AddNew")]
@@ -41,11 +40,50 @@ namespace TaskDesc_BackEnd.Controllers
 
             Response response = new Response()
             {
-                Massage = result ? "Added" : "Not Added"
+                Massage = result ? "New Measures Added" : "Not Added"
             };
             return response;
         }
-            
+
+        [HttpGet]
+        [Route("DistinctList")]
+        public ActionResult<IEnumerable<string>> DistinctList()
+        {
+            var data = measure.DistinctList();
+            return Ok(data);
+        }
+
+        [HttpGet]
+        [Route("AllMeasure")]
+        public ActionResult<IEnumerable<SysUnitsOfMeasureVM>> AllMeasure()
+        {
+            var data = measure.GetAllMeasure();
+            var dataVM = mapper.Map<IEnumerable<SysUnitsOfMeasureVM>>(data);
+            return Ok(dataVM);
+        }
+
+        [HttpGet]
+        [Route("GetMeasures")]
+        public IEnumerable<SysUnitsOfMeasureVM> GetMeasures(string Caption)
+        {
+            var data = measure.GetMeasureByCaption(Caption);
+            var dataVM = mapper.Map<IEnumerable<SysUnitsOfMeasureVM>>(data);
+            return dataVM;
+        }
+
+        [HttpPatch]
+        [Route("UpdateMeasures")]
+        public Response UpdateMeasures([FromBody] SysUnitsOfMeasureVM obj)
+        {
+            var result = measure.UpdateMeasure(mapper.Map<SysUnitsOfMeasure>(obj));
+
+            Response response = new Response()
+            {
+                Massage = result ? "Update One Measure" : "Not Update"
+            };
+            return response;
+        }
+
         #endregion
     }
 }

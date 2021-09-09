@@ -12,10 +12,12 @@ namespace TaskDesc_BackEnd.BL.Interface
 
         public IEnumerable<SysUnitsOfMeasure> GetAllMeasure();
 
-        public SysUnitsOfMeasure GetMeasureById(long id);
+        public IEnumerable<SysUnitsOfMeasure> GetMeasureByCaption(string Caption);
 
         public string DeleteMeasure(long id);
 
-        public string UpdateMeasure(SysUnitsOfMeasure Model);
+        public bool UpdateMeasure(SysUnitsOfMeasure Model);
+
+        public IEnumerable<string> DistinctList();
     }
 }

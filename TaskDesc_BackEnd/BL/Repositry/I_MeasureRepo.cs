@@ -65,11 +65,11 @@ namespace TaskDesc_BackEnd.BL.Repositry
             }
         }
 
-        public SysUnitsOfMeasure GetMeasureById(long id)
+        public IEnumerable<SysUnitsOfMeasure> GetMeasureByCaption(string Caption)
         {
             try
             {
-                var Model = context.SysUnitsOfMeasures.Where(a => a.Uomkey == id).FirstOrDefault();
+                var Model = context.SysUnitsOfMeasures.Where(a => a.UomeCaption == Caption);
                 return Model;
             }
             catch (Exception ex)
@@ -79,13 +79,27 @@ namespace TaskDesc_BackEnd.BL.Repositry
             }
         }
 
-        public string UpdateMeasure(SysUnitsOfMeasure Model)
+        public bool UpdateMeasure(SysUnitsOfMeasure Model)
         {
             try
             {
                 context.Entry(Model).State = EntityState.Modified;
-                context.SaveChanges();
-                return "Measure Updated";
+                int result = context.SaveChanges();
+                bool addingResult = result > 0;
+                return addingResult;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<string> DistinctList()
+        {
+            try
+            {
+                var data = context.SysUnitsOfMeasures.Select(a => a.UomeCaption).Distinct();
+                return data;
             }
             catch (Exception)
             {
